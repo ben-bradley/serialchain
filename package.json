@@ -1,0 +1,33 @@
+{
+  "name": "serialchain",
+  "version": "0.0.2",
+  "description": "A way to serialize/chain async functions.",
+  "main": "index.js",
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "should": "^4.0.4",
+    "mocha": "^1.21.3"
+  },
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ben-bradley/serialchain"
+  },
+  "keywords": [
+    "async",
+    "serial",
+    "chain"
+  ],
+  "author": "Ben Bradley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ben-bradley/serialchain/issues"
+  },
+  "homepage": "https://github.com/ben-bradley/serialchain"
+}
