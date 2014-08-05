@@ -8,13 +8,15 @@ I like writing chains and really wanted to be able to do it with asynch code.  T
 
 ### Installation
 
+`npm install serialchain`
+
 `npm install ben-bradley/serialchain`
 
 ### Concepts & Use
 
 - You create a `chain`:
 ```
-var chain = new SerialChain({ methoda: function(a, done) {
+var chain = new SerialChain({ methodA: function(a, done) {
   // do something
   done(err, a);
 }})
