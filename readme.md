@@ -148,7 +148,7 @@ chain
 `$ npm install && npm test`
 
 ### Version History
-- 0.0.4 - Version bump, added Travis
+- 0.0.4 - Version bump, added Travis-CI
 - 0.0.3 - Added `timeout()`.
 - 0.0.2 - Refactored to `serialchain`.
 - 0.0.1 - Removed `async` dependency.
