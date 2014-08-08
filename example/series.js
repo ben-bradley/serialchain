@@ -12,6 +12,7 @@ var chain = new ChainAsync({
 });
 
 chain.add('returnOne', function (a, done) {
+  console.log(arguments);
   setTimeout(function () {
     done(null, a);
   }, 500);
@@ -32,7 +33,7 @@ chain.add({
 
 chain
   .returnOne('one')
-  .thingOne('1')
+  .thingOne('1').timeout(5000)
   .blargh()
   .returnTwoThree('two', 'three')
   .done(function (err, results) {
