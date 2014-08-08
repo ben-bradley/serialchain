@@ -60,6 +60,11 @@ describe('chain', function () {
         done(null, b);
       }, 250);
     },
+    methodC: function (done) {
+      setTimeout(function () {
+        done();
+      }, 100);
+    },
     errorMethod: function (x, done) {
       var err = new Error(x);
       done(err);
@@ -88,6 +93,20 @@ describe('chain', function () {
     var chain = new SerialChain(links);
     chain
       .methodB('xyz')
+      .methodA('abc')
+      .done(function (err, results) {
+        (results).should.be.an.Array;
+        (results[0]).should.equal('xyz');
+        (results[1]).should.equal('abc');
+        done();
+      });
+  });
+
+  it('should return [ "xyz", "abc" ]', function (done) {
+    var chain = new SerialChain(links);
+    chain
+      .methodB('xyz')
+      .methodC()
       .methodA('abc')
       .done(function (err, results) {
         (results).should.be.an.Array;
