@@ -1,4 +1,5 @@
-# SerialChain
+# SerialChain [![Build Status](https://secure.travis-ci.org/ben-bradley/serialchain.png)](http://travis-ci.org/ben-bradley/serialchain)
+[![NPM](https://nodei.co/npm/serialchain.png)](https://nodei.co/npm/serialchain/)
 
 ### Description
 
@@ -144,9 +145,10 @@ chain
 
 ### Tests
 
-`$ npm test`
+`$ npm install && npm test`
 
 ### Version History
+- 0.0.4 - Version bump, added Travis
 - 0.0.3 - Added `timeout()`.
 - 0.0.2 - Refactored to `serialchain`.
 - 0.0.1 - Removed `async` dependency.
