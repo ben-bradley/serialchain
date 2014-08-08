@@ -77,6 +77,7 @@ describe('chain', function () {
   };
 
   it('should return [ "abc", "xyz" ]', function (done) {
+    this.timeout(3000);
     var chain = new SerialChain(links);
     chain
       .methodA('abc')
@@ -90,6 +91,7 @@ describe('chain', function () {
   });
 
   it('should return [ "xyz", "abc" ]', function (done) {
+    this.timeout(3000);
     var chain = new SerialChain(links);
     chain
       .methodB('xyz')
@@ -103,6 +105,7 @@ describe('chain', function () {
   });
 
   it('should return [ "xyz", "abc" ]', function (done) {
+    this.timeout(3000);
     var chain = new SerialChain(links);
     chain
       .methodB('xyz')
@@ -117,6 +120,7 @@ describe('chain', function () {
   });
 
   it('should return an error', function (done) {
+    this.timeout(3000);
     var chain = new SerialChain(links);
     chain
       .methodA('abc')
@@ -130,6 +134,7 @@ describe('chain', function () {
   });
 
   it('should return a timeout', function (done) {
+    this.timeout(3000);
     var chain = new SerialChain(links);
     chain
       .methodA('abc')
@@ -143,6 +148,7 @@ describe('chain', function () {
   });
 
   it('should pass by the timeout', function (done) {
+    this.timeout(3000);
     var chain = new SerialChain(links);
     chain
       .methodA('abc')
