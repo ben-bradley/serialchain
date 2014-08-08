@@ -29,13 +29,11 @@ chain.add({
   }
 })
 
-
 chain
   .returnOne('one')
-  .thingOne('1')
+  .thingOne('1').timeout(5000)
   .blargh()
   .returnTwoThree('two', 'three')
   .done(function (err, results) {
     console.log(arguments);
-    console.log(thing);
   });

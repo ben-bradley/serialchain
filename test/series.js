@@ -1,16 +1,16 @@
-var ChainAsync = require('../'),
+var SerialChain = require('../'),
   should = require('should');
 
-describe('ChainAsync()', function () {
+describe('SerialChain()', function () {
 
   it('should create an instance', function (done) {
-    var chain = new ChainAsync();
-    (chain).should.be.instanceof(ChainAsync);
+    var chain = new SerialChain();
+    (chain).should.be.instanceof(SerialChain);
     done();
   });
 
   it('should allow method creation at instantiation', function (done) {
-    var chain = new ChainAsync({
+    var chain = new SerialChain({
       methodOne: function (x, done) {
         setTimeout(function () {
           done(null, x);
@@ -22,7 +22,7 @@ describe('ChainAsync()', function () {
   });
 
   it('should allow method creation after instantiation - object', function (done) {
-    var chain = new ChainAsync();
+    var chain = new SerialChain();
     chain.add({
       methodOne: function (x, done) {
         setTimeout(function () {
@@ -35,7 +35,7 @@ describe('ChainAsync()', function () {
   });
 
   it('should allow method creation after instantiation - args', function (done) {
-    var chain = new ChainAsync();
+    var chain = new SerialChain();
     chain.add('methodOne', function (x, done) {
       setTimeout(function () {
         done(null, x);
@@ -59,12 +59,20 @@ describe('chain', function () {
       setTimeout(function () {
         done(null, b);
       }, 250);
+    },
+    errorMethod: function (x, done) {
+      var err = new Error(x);
+      done(err);
+    },
+    timeoutMethod: function (x, done) {
+      setTimeout(function () {
+        done(null, x);
+      }, 1250);
     }
   };
 
   it('should return [ "abc", "xyz" ]', function (done) {
-    var chain = new ChainAsync(links);
-
+    var chain = new SerialChain(links);
     chain
       .methodA('abc')
       .methodB('xyz')
@@ -77,8 +85,7 @@ describe('chain', function () {
   });
 
   it('should return [ "xyz", "abc" ]', function (done) {
-    var chain = new ChainAsync(links);
-
+    var chain = new SerialChain(links);
     chain
       .methodB('xyz')
       .methodA('abc')
@@ -91,12 +98,7 @@ describe('chain', function () {
   });
 
   it('should return an error', function (done) {
-    var chain = new ChainAsync(links);
-    chain.add('errorMethod', function (x, done) {
-      var err = new Error(x);
-      done(err);
-    });
-
+    var chain = new SerialChain(links);
     chain
       .methodA('abc')
       .errorMethod('this is an error')
@@ -104,6 +106,35 @@ describe('chain', function () {
       .done(function (err, results) {
         (err).should.be.an.Error;
         (err.message).should.equal('this is an error');
+        done();
+      });
+  });
+
+  it('should return a timeout', function (done) {
+    var chain = new SerialChain(links);
+    chain
+      .methodA('abc')
+      .timeoutMethod('fail').timeout(1000)
+      .methodB('xyz')
+      .done(function (err, results) {
+        (err).should.be.an.Error;
+        (err.message).should.equal('Timeout: timeoutMethod');
+        done();
+      });
+  });
+
+  it('should pass by the timeout', function (done) {
+    var chain = new SerialChain(links);
+    chain
+      .methodA('abc')
+      .timeoutMethod('pass').timeout(1500)
+      .methodB('xyz')
+      .done(function (err, results) {
+        (err === null).should.be.true;
+        (results).should.be.an.Array;
+        (results[0]).should.equal('abc');
+        (results[1]).should.equal('pass');
+        (results[2]).should.equal('xyz');
         done();
       });
   });
