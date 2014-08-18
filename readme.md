@@ -43,6 +43,38 @@ chain
   });
 ```
 
+### `locals`
+
+I found that I needed to have an easy way to pass variables between my chained methods so I added the `locals` property/namespace to the `chain`.
+
+```js
+var chain = new SerialChain();
+
+chain.add('methodA', function (done) {
+  var locals = this.locals;
+  // do something async to produce a value to pass to the next method
+  locals.a = 'produced value';
+  done(); // nothing is returned
+});
+
+chain.add('methodB', function (done) {
+  if (this.locals.a)
+    this.locals.b = 'methodA() was called first';
+  else
+    this.locals.b = 'methodB() was called first';
+  done(); // nothing is returned
+});
+
+chain
+  .methodB()
+  .methodA()
+  .done(function (err, results) {
+    console.log(results); // => [] because neither returned anything
+    console.log(this.locals); // =>
+    // { a: 'produced value', b: 'methodB() was called first' }
+  });
+```
+
 ### Built-in Methods
 
 - __`SerialChain()`__
@@ -148,6 +180,7 @@ chain
 `$ npm install && npm test`
 
 ### Version History
+- 0.0.6 - Added `locals` namespace to pass vars between methods
 - 0.0.5 - Calling `done()` without args in an `add()`ed method doesn't populate results.
 - 0.0.4 - Version bump, added Travis-CI.
 - 0.0.3 - Added `timeout()`.

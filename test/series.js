@@ -14,7 +14,7 @@ describe('SerialChain()', function () {
       methodOne: function (x, done) {
         setTimeout(function () {
           done(null, x);
-        }, 250);
+        }, 100);
       }
     });
     (chain.methodOne).should.be.a.function;
@@ -27,7 +27,7 @@ describe('SerialChain()', function () {
       methodOne: function (x, done) {
         setTimeout(function () {
           done(null, x);
-        }, 250);
+        }, 100);
       }
     });
     (chain.methodOne).should.be.a.function;
@@ -39,10 +39,23 @@ describe('SerialChain()', function () {
     chain.add('methodOne', function (x, done) {
       setTimeout(function () {
         done(null, x);
-      }, 250);
+      }, 100);
     });
     (chain.methodOne).should.be.a.function;
     done();
+  });
+
+  it('should have a .locals namespace', function (done) {
+    var chain = new SerialChain
+    chain.add('methodOne', function (done) {
+      (this.locals).should.be.an.Object;
+      setTimeout(function () {
+        done(null);
+      }, 100);
+    });
+    chain.methodOne().done(function (err, results) {
+      done(err);
+    });
   });
 
 });
@@ -73,6 +86,16 @@ describe('chain', function () {
       setTimeout(function () {
         done(null, x);
       }, 1250);
+    },
+    methodD: function (done) {
+      var locals = this.locals;
+      setTimeout(function () {
+        if (locals.foo)
+          locals.foo += 'baz';
+        else
+          locals.foo = 'bar';
+        done(null, locals.foo);
+      }, 100);
     }
   };
 
@@ -160,6 +183,22 @@ describe('chain', function () {
         (results[0]).should.equal('abc');
         (results[1]).should.equal('pass');
         (results[2]).should.equal('xyz');
+        done();
+      });
+  });
+
+  it('should let variables pass between methods via locals', function (done) {
+    this.timeout(3000);
+    var chain = new SerialChain(links);
+    chain
+      .methodD()
+      .methodD()
+      .done(function (err, results) {
+        (err === null).should.be.true;
+        (results).should.be.an.Array;
+        (this.locals.foo).should.equal('barbaz');
+        (results[0]).should.equal('bar');
+        (results[1]).should.equal('barbaz');
         done();
       });
   });
