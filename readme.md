@@ -43,7 +43,7 @@ chain
   });
 ```
 
-### `locals`
+### `this.locals`
 
 I found that I needed to have an easy way to pass variables between my chained methods so I added the `locals` property/namespace to the `chain`.
 
@@ -53,7 +53,9 @@ var chain = new SerialChain();
 chain.add('methodA', function (done) {
   var locals = this.locals;
   // do something async to produce a value to pass to the next method
-  locals.a = 'produced value';
+  setTimeout(function() {
+    locals.a = 'produced value';
+  }, 100);
   done(); // nothing is returned
 });
 
