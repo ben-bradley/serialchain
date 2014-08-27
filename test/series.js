@@ -203,4 +203,20 @@ describe('chain', function () {
       });
   });
 
+  describe('should reset the ._chain with the .done() call', function(done) {
+    var chain = new SerialChain(links);
+    before('register methodA() in the ._chain', function(done) {
+
+      chain
+        .methodA('abc')
+        .done(function(err, results) {
+          done();
+        });
+    });
+    it('should not have methodA() in the ._chain', function(done) {
+      (chain._chain.length).should.equal(0);
+      done();
+    });
+  });
+
 });

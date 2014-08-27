@@ -182,6 +182,8 @@ chain
 `$ npm install && npm test`
 
 ### Version History
+
+- 0.0.7 - Added code to clean up `_chain` when `done()` is called
 - 0.0.6 - Added `locals` namespace to pass vars between methods
 - 0.0.5 - Calling `done()` without args in an `add()`ed method doesn't populate results.
 - 0.0.4 - Version bump, added Travis-CI.
