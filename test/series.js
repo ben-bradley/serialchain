@@ -78,8 +78,12 @@ describe('chain', function () {
         done();
       }, 100);
     },
-    errorMethod: function (x, done) {
+    errorMethodA: function (x, done) {
       var err = new Error(x);
+      done(err);
+    },
+    errorMethodB: function (x, done) {
+      var err = 'Error: ' + x;
       done(err);
     },
     timeoutMethod: function (x, done) {
@@ -147,11 +151,25 @@ describe('chain', function () {
     var chain = new SerialChain(links);
     chain
       .methodA('abc')
-      .errorMethod('this is an error')
+      .errorMethodA('this is an error')
       .methodB('xyz')
       .done(function (err, results) {
         (err).should.be.an.Error;
         (err.message).should.equal('this is an error');
+        done();
+      });
+  });
+
+  it('should return a proper error', function(done) {
+    this.timeout(3000);
+    var chain = new SerialChain(links);
+    chain
+      .methodA('abc')
+      .errorMethodB('this is an error')
+      .methodB('xyz')
+      .done(function (err, results) {
+        (err).should.be.an.Error;
+        (err.message).should.equal('Error: this is an error');
         done();
       });
   });
