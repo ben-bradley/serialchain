@@ -183,6 +183,7 @@ chain
 
 ### Version History
 
+- 0.0.8 - Ensured that errors are promoted to be a `new Error()`
 - 0.0.7 - Added code to clean up `_chain` when `done()` is called
 - 0.0.6 - Added `locals` namespace to pass vars between methods
 - 0.0.5 - Calling `done()` without args in an `add()`ed method doesn't populate results.
